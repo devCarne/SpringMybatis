@@ -19,4 +19,8 @@
     <delete id="delete">
         delete from SIMPLE_BBS where ID = #{_id}
     </delete>
+
+    <update id="update">
+        UPDATE SIMPLE_BBS SET WRITER = #{0}, TITLE = #{1}, CONTENT = #{2} WHERE ID = #{_id}
+    </update>
 </mapper>

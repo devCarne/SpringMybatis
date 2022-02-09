@@ -7,7 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -62,6 +61,23 @@ public class MyController {
     @RequestMapping("/delete")
     public String delete(HttpServletRequest req) {
         bbsDAO.delete(req.getParameter("id"));
+        return "redirect:list";
+    }
+
+    @RequestMapping("/updateForm")
+    public String updateForm(HttpServletRequest req, Model model) {
+        model.addAttribute("dto", bbsDAO.view(req.getParameter("id")));
+        return "modifyForm";
+    }
+
+    @RequestMapping("/update")
+    public String update(HttpServletRequest req) {
+        bbsDAO.update(
+                req.getParameter("id"),
+                req.getParameter("writer"),
+                req.getParameter("title"),
+                req.getParameter("content")
+        );
         return "redirect:list";
     }
 }

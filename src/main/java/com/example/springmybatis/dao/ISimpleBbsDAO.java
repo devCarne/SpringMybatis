@@ -16,4 +16,6 @@ public interface ISimpleBbsDAO {
     int write(@Param("0") String writer, @Param("1") String title, @Param("2") String content);
 
     int delete(@Param("_id") String id);
+
+    int update(@Param("_id") String id, @Param("0") String writer, @Param("1") String title, @Param("2") String content);
 }
