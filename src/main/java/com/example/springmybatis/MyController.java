@@ -1,7 +1,8 @@
 package com.example.springmybatis;
 
-import com.example.springmybatis.dao.ISimpleBbsDAO;
+import com.example.springmybatis.dto.SimpleBbsDTO;
 import com.example.springmybatis.jdbc.IMyUserDAO;
+import com.example.springmybatis.service.SimperBbsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,7 +18,7 @@ public class MyController {
     private IMyUserDAO dao;
 
     @Autowired
-    private ISimpleBbsDAO bbsDAO;
+    private SimperBbsService service;
 
     @RequestMapping("/")
     public String root() throws Exception {
@@ -32,14 +33,14 @@ public class MyController {
 
     @RequestMapping("/list")
     public String bbsList(Model model) {
-        model.addAttribute("list", bbsDAO.getList());
+        model.addAttribute("list", service.getList());
         return "list";
     }
 
     @RequestMapping("/view")
     public String view(HttpServletRequest req, Model model) {
         String id = req.getParameter("id");
-        model.addAttribute("dto", bbsDAO.view(id));
+        model.addAttribute("dto", service.view(id));
         return "view";
     }
 
@@ -50,7 +51,7 @@ public class MyController {
 
     @RequestMapping("/write")
     public String write(HttpServletRequest req) {
-        bbsDAO.write(
+        service.write(
                 req.getParameter("writer"),
                 req.getParameter("title"),
                 req.getParameter("content")
@@ -60,23 +61,23 @@ public class MyController {
 
     @RequestMapping("/delete")
     public String delete(HttpServletRequest req) {
-        bbsDAO.delete(req.getParameter("id"));
+        service.delete(req.getParameter("id"));
         return "redirect:list";
     }
 
     @RequestMapping("/updateForm")
     public String updateForm(HttpServletRequest req, Model model) {
-        model.addAttribute("dto", bbsDAO.view(req.getParameter("id")));
+        model.addAttribute("dto", service.view(req.getParameter("id")));
         return "modifyForm";
     }
 
     @RequestMapping("/update")
     public String update(HttpServletRequest req) {
-        bbsDAO.update(
-                req.getParameter("id"),
+        service.update(new SimpleBbsDTO(
+                Integer.parseInt(req.getParameter("id")),
                 req.getParameter("writer"),
                 req.getParameter("title"),
-                req.getParameter("content")
+                req.getParameter("content"))
         );
         return "redirect:list";
     }
